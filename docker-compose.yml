@@ -1,3 +1,4 @@
+version: "3"
 services:
   mysqldb:
     image: mysql:latest
@@ -12,7 +13,7 @@ services:
       - ci-net
 
   spring-service:
-    image: roua1612/station-ski
+    image: roua1612/gestion-station-ski
     ports:
       - 8089:8089
     environment:
@@ -22,6 +23,12 @@ services:
     depends_on:
       - mysqldb
     restart: unless-stopped
+    networks:
+      - ci-net
+  angular-service:
+    image: roua1612/front
+    ports:
+      - "4200:80"
     networks:
       - ci-net
 
