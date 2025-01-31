@@ -1,0 +1,27 @@
+version: "3"
+services:
+  mysqldb:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=gestion-station-ski-db
+      - MYSQL_PASSWORD=root
+    restart: unless-stopped
+    volumes:
+      -  /home/mysql/data:/var/lib/mysql
+    networks:
+      - ci-net 
+
+  spring-service:
+    image: roua1612/station-ski
+    ports:
+      - 8089:8089
+    environment :
+      -SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb/gestion-station-ski-db
+      -SPRING_DATASOURCE_USERNAME : root
+      -SPRING_DATASOURCE_PASSWORD : root
+    depends_on:
+      - mysqldb
+    restart: unless-stopped
+    networks:
+      - ci-net
